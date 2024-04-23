@@ -1,4 +1,4 @@
-import { scaleFactor } from "./constants.js";
+import { dialogueData, scaleFactor } from "./constants.js";
 import { k } from "./kaboomCtx.js"
 import { displayDialogue, setCamScale } from "./utils.js";
 
@@ -15,12 +15,12 @@ k.loadSprite("spritesheet", "./spritesheet.png", {
 	}
 });
 
-k.loadSprite("map", "./map.png");
+k.loadSprite("map", "./map3.png");
 
 k.setBackground(k.Color.fromHex("#311047"));
 
 k.scene("main", async () => {
-	const mapData = await (await fetch("./map.json")).json()
+	const mapData = await (await fetch("./map3.json")).json()
 	const layers = mapData.layers;
 
 	const map = k.add([
@@ -67,7 +67,7 @@ k.scene("main", async () => {
 				if (boundary.name) {
 					player.onCollide(boundary.name, () => {
 						player.isInDialogue = true;
-						displayDialogue("TODO", () => player.isInDialogue = false)
+						displayDialogue(dialogueData[boundary.name], () => player.isInDialogue = false)
 					})
 				}
 			}
@@ -125,20 +125,33 @@ k.scene("main", async () => {
 
 		if ( Math.abs(mouseAngle) > upperBound) {
 			player.flipX = false;
+			player.direction = ("right")
 			if (player.curAnim() !== "walk-side") {
 				player.play("walk-side");
-				player.direction = ("right")
 				return
 			}
 		}
 
 		if (Math.abs(mouseAngle) < lowerBound) {
 			player.flipX = true;
+			player.direction = ("left")
 			if (player.curAnim() !== "walk-side") {
 				player.play("walk-side");
-				player.direction = ("left")
 			}
 		}
+	})
+
+	k.onMouseRelease(() => {
+		if (player.direction === "down") {
+			player.play("idle-down");
+			return
+		}
+		if (player.direction === "up") {
+			player.play("idle-up");
+			return
+		}
+		player.play("idle-side")
+
 	})
 });
 
