@@ -15,12 +15,12 @@ k.loadSprite("spritesheet", "./spritesheet.png", {
 	}
 });
 
-k.loadSprite("map", "./map3.png");
+k.loadSprite("map", "./map4.png");
 
 k.setBackground(k.Color.fromHex("#311047"));
 
 k.scene("main", async () => {
-	const mapData = await (await fetch("./map3.json")).json()
+	const mapData = await (await fetch("./map4.json")).json()
 	const layers = mapData.layers;
 
 	const map = k.add([
@@ -114,8 +114,8 @@ k.scene("main", async () => {
 		}
 
 		if (
-			mouseAngle < -lowerBound && 
-			mouseAngle > -upperBound && 
+			mouseAngle < -lowerBound &&
+			mouseAngle > -upperBound &&
 			player.curAnim() !== "walk-down"
 		) {
 			player.play("walk-down");
@@ -123,7 +123,7 @@ k.scene("main", async () => {
 			return
 		}
 
-		if ( Math.abs(mouseAngle) > upperBound) {
+		if (Math.abs(mouseAngle) > upperBound) {
 			player.flipX = false;
 			player.direction = ("right")
 			if (player.curAnim() !== "walk-side") {
